@@ -31,35 +31,54 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Intrusion Detection System")
-        self.geometry("400x300")
+        self.geometry("600x400")
 
-        # Label
-        self.label = ctk.CTkLabel(self, text="Hello, CustomTkinter!", font=("Arial", 20))
-        self.label.pack(pady=20)
+        # Setting up grid layout
+        self.grid_columnconfigure(0, weight=1) # Left
+        self.grid_columnconfigure(1, weight=3) # Middle
+        self.grid_columnconfigure(2, weight=1) # Right
+        self.grid_rowconfigure(5, weight=1) # Footer
 
-        # Entry
-        self.entry = ctk.CTkEntry(self, placeholder_text="Type something...")
-        self.entry.pack(pady=10)
+        """Left Column"""
+        # Labels
+        self.left_tools_label = ctk.CTkLabel(self, text="Tools", font=("Arial", 15))
+        self.left_tools_label.grid(row=0, column=0, padx=5, pady=5)
+        
+        self.left_label = ctk.CTkLabel(self, text="", font=("Arial", 12))
+        self.left_label.grid(row=1, column=0, padx=5, pady=5)
 
-        # Button
-        self.button = ctk.CTkButton(self, text="local ip address", command=self.local_ip)
-        self.button.pack(pady=10)
+        # Buttons
+        self.get_ip_button = ctk.CTkButton(self, text="local ip address", command=self.local_ip)
+        self.get_ip_button.grid(row=2, column=0, padx=5, pady=5)
 
-        self.button1 = ctk.CTkButton(self, text="local socket", command=self.local_socket)
-        self.button1.pack(pady=10)
+        self.get_current_local_socket = ctk.CTkButton(self, text="local socket", command=self.local_socket)
+        self.get_current_local_socket.grid(row=3, column=0, padx=5, pady=5)
 
+        """Middle Column"""
+        self.middle_main_label = ctk.CTkLabel(self, text="Logs", font=('Arial', 15))
+        self.middle_main_label.grid(row=0, column=1, padx=5, pady=5)
+
+        """Right Column"""
+        self.right_main_label = ctk.CTkLabel(self, text="Misc.", font=('Arial', 15))
+        self.right_main_label.grid(row=0, column=2, padx=5, pady=5)
+
+
+        """Footer"""
+
+        self.footer = ctk.CTkLabel(self, text="© 2025 Evan Howell - All rights reserved", font=("Arial", 12))
+        self.footer.grid(row=6, column=0, columnspan=3, sticky="we", padx=10, pady=(20, 10))
 
         # Switch
-        self.switch = ctk.CTkSwitch(self, text="Toggle me")
-        self.switch.pack(pady=10)
+        #self.switch = ctk.CTkSwitch(self, text="Toggle me")
+        #self.switch.pack(pady=10)
 
     def local_ip(self):
         ip_address = get_local_ip()
-        self.label.configure(text=f"local IP Address: {ip_address[0]}")
+        self.left_label.configure(text=f"local IP Address: {ip_address[0]}")
     
     def local_socket(self):
         socket = get_local_ip()[1]
-        self.label.configure(text=f"current local Socket: {socket}")
+        self.left_label.configure(text=f"current local Socket: {socket}")
 
 
 
