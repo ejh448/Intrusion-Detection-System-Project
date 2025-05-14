@@ -3,3 +3,6 @@ Libraries used:
     Socket (built in for python)
     matplotlib
     scapy
+
+have to run scapy1.py as:
+    sudo .venv/bin/python scapy1.py

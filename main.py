@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import socket
-
+import threading
+from scapy.all import sniff
 
 
 def get_local_ip():
@@ -20,6 +21,8 @@ def get_local_ip():
     finally:
         sock.close()
     return ip_socket
+
+
 
 
 # Options: "System" (default), "Dark", "Light"
@@ -67,8 +70,8 @@ class App(ctk.CTk):
         self.middle_frame = ctk.CTkFrame(self)
         self.middle_frame.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
 
-        self.populate_scroll_frame_button = ctk.CTkButton(self.middle_frame, text="populate scroll", command=self.populate_scroll_frame)
-        self.populate_scroll_frame_button.grid(row=0, column=0, padx=5, pady=5)
+        self.sniff_button = ctk.CTkButton(self.middle_frame, text="Start Sniffing", command=lambda: self.start_sniffing(10))
+        self.sniff_button.grid(row=0, column=0, padx=5, pady=5)
 
         self.clear_scroll_frame_button = ctk.CTkButton(self.middle_frame, text="clear scroll", command=self.clear_scroll_frame)
         self.clear_scroll_frame_button.grid(row=0, column=1, padx=5, pady=5)
@@ -109,8 +112,25 @@ class App(ctk.CTk):
         try:
             self.scroll_frame._parent_canvas.yview_moveto(0)
         except AttributeError:
-            pass # fioxes possible error with scroll frame not being scrollable yet. 
+            pass # fixes possible error with scroll frame not being scrollable yet. 
+    
+    #probably will change
+    def start_sniffing(self, packet_count=10):
+        thread = threading.Thread(target=self.sniff_packets, args=(packet_count,))
+        thread.daemon = True
+        thread.start()
 
+    def sniff_packets(self, packet_count):
+        sniff(prn=self.display_packet, count=packet_count, store=False)
+
+    def display_packet(self, packet):
+        summary = packet.summary()
+        # Use `after()` to safely update the GUI from another thread
+        self.after(0, self.add_packet_to_scroll_frame, summary)
+
+    def add_packet_to_scroll_frame(self, text):
+        label = ctk.CTkLabel(self.scroll_frame, text=text, anchor="w")
+        label.pack(pady=2, padx=10, anchor="w")
 if __name__ == "__main__":
     app = App()
     app.mainloop()
