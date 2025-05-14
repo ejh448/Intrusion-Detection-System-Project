@@ -1,0 +1,5 @@
+Libraries used:
+    CustomTkinter
+    Socket (built in for python)
+    matplotlib
+    scapy
