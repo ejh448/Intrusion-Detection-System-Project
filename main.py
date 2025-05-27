@@ -70,7 +70,7 @@ class App(ctk.CTk):
         self.middle_frame = ctk.CTkFrame(self)
         self.middle_frame.grid(row=2, column=1, sticky="nsew", padx=10, pady=10)
 
-        self.sniff_button = ctk.CTkButton(self.middle_frame, text="Start Sniffing", command=lambda: self.start_sniffing(10))
+        self.sniff_button = ctk.CTkButton(self.middle_frame, text="Start Sniffing", command=lambda: self.start_sniffing(10000))
         self.sniff_button.grid(row=0, column=0, padx=5, pady=5)
 
         self.clear_scroll_frame_button = ctk.CTkButton(self.middle_frame, text="clear scroll", command=self.clear_scroll_frame)
@@ -86,10 +86,6 @@ class App(ctk.CTk):
         """Footer"""
         self.footer = ctk.CTkLabel(self, text="© 2025 Evan Howell - All rights reserved", font=("Arial", 12))
         self.footer.grid(row=6, column=0, columnspan=3, sticky="we", padx=10, pady=(20, 10))
-
-        # Switch
-        #self.switch = ctk.CTkSwitch(self, text="Toggle me")
-        #self.switch.pack(pady=10)
 
     def local_ip(self):
         ip_address = get_local_ip()
@@ -114,7 +110,6 @@ class App(ctk.CTk):
         except AttributeError:
             pass # fixes possible error with scroll frame not being scrollable yet. 
     
-    #probably will change
     def start_sniffing(self, packet_count=10):
         thread = threading.Thread(target=self.sniff_packets, args=(packet_count,))
         thread.daemon = True
